@@ -11,7 +11,7 @@ import numpy as np
 def restaurant(station, displayCount):
 
     dfs = []
-    for page in range(1, 4):
+    for page in range(1, 4):  # 1페이지부터 ~4(n) 페이지까지
         url = "https://map.naver.com/v5/api/search?caller=pcweb&query={}맛집&type=all&page={}&displayCount={}&isPlaceRecommendationReplace=true&lang=ko".format(
             station, page, displayCount
         )
@@ -86,7 +86,8 @@ def inform_restaurant(url):
         name = i.find("span", "_3yfZ1").text  # 메뉴명
         price = i.find("div", "_3qFuX").text  # 메뉴 가격
         menu_list.append(name)
-        if price != "변동":
+        if price != "변동" and "원" in price:
+            print(price)
             price_list.append(int(price[:-1].replace(",", "")))
     mean_price = np.mean(price_list)  # 평균 가격
 
@@ -108,10 +109,17 @@ def inform_restaurant(url):
 #     add = restaurant("충무로")
 
 
-urls = restaurant("충무로", 1)  # 지역, 음식점 갯수
-df = pd.DataFrame(columns=["이름", "분류", "분위기(테마키워드)", "주요 메뉴", "평균 가격", "평점", "리뷰 수"])
-for url in urls:
+#     print(soup.find("p", "story").text)
+# if __name__ == "__main__":
+#     add = restaurant("충무로")
 
-    result = inform_restaurant(url)
 
-    df = pd.concat([df, pd.DataFrame(result)], ignore_index=False)
+# urls = restaurant("충무로", 1)  # 지역, 3*n = 음식점개수
+# df = pd.DataFrame(columns=["이름", "분류", "분위기(테마키워드)", "주요 메뉴", "평균 가격", "평점", "리뷰 수"])
+# for url in urls:
+
+#     result = inform_restaurant(url)
+
+#     df = pd.concat([df, pd.DataFrame(result)], ignore_index=False)
+
+# print(df)
